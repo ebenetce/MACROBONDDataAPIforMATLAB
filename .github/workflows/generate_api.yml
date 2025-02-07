@@ -45,7 +45,7 @@ jobs:
         run: |
           cd external-repo/Software
           npx @openapitools/openapi-generator-cli --custom-generator MATLAB/lib/jar/MATLABClientCodegen-openapi-generator-0.0.1.jar generate -g MATLAB -i https://api.macrobondfinancial.com/swagger/v1/swagger.json -o MacrobondMATLABAPI --package-name MacrobondMATLABAPI
-          cp -r MacrobondMATLABAPI/* current-repo/
+          cp -r MacrobondMATLABAPI/* /current-repo/
 
       - name: Configure Git
         run: |          
