@@ -41,14 +41,14 @@ jobs:
           cd external-repo/Software/Java
           mvn -q clean package
 
-      - name: 
+      - name: Generate API
         run: |
           cd external-repo/Software
           npx @openapitools/openapi-generator-cli --custom-generator MATLAB/lib/jar/MATLABClientCodegen-openapi-generator-0.0.1.jar generate -g MATLAB -i https://api.macrobondfinancial.com/swagger/v1/swagger.json -o MacrobondMATLABAPI --package-name MacrobondMATLABAPI
-          cp -r MacrobondMATLABAPI/* /current-repo/
 
       - name: Configure Git
-        run: |          
+        run: |    
+          cp -r external-repo/Software/MacrobondMATLABAPI/* current-repo/
           cd current-repo
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
