@@ -60,7 +60,11 @@ jobs:
         run: |
           cd current-repo
           git add .
-          git commit -m "Update generated MATLAB API"
-          git push origin main
+          # Check if there are any changes to commit
+          if git diff-index --quiet HEAD --; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update generated MATLAB API"
+            git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
