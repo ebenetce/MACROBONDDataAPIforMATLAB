@@ -8,7 +8,8 @@ on:
     branches:
       - main
 env:
-  PACKAGE_NAME: macrobond # Define your package name here
+  PACKAGE_NAME: macrobond
+  OPENAPI_SPEC: https://api.macrobondfinancial.com/swagger/v1/swagger.json
 
 jobs:
   process-yaml:
@@ -46,7 +47,7 @@ jobs:
       - name: Generate API
         run: |
           cd external-repo/Software
-          npx @openapitools/openapi-generator-cli --custom-generator MATLAB/lib/jar/MATLABClientCodegen-openapi-generator-0.0.1.jar generate -g MATLAB -i https://api.macrobondfinancial.com/swagger/v1/swagger.json -o macrobond --package-name ${{ env.PACKAGE_NAME }}
+          npx @openapitools/openapi-generator-cli -p AddOAuth=auth --custom-generator MATLAB/lib/jar/MATLABClientCodegen-openapi-generator-0.0.1.jar generate -g MATLAB -i ${{OPENAPI_SPEC}} -o macrobond --package-name ${{ env.PACKAGE_NAME }}
 
       - name: Configure Git
         run: |    
