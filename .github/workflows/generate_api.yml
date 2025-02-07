@@ -1,12 +1,10 @@
 name: Generate Macrobond API
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  schedule:
+    # This cron expression schedules the workflow to run at 00:00 on the first day of every month
+    - cron: '0 0 1 * *'
+    
 env:
   PACKAGE_NAME: macrobond
   OPENAPI_SPEC: https://api.macrobondfinancial.com/swagger/v1/swagger.json
@@ -47,7 +45,7 @@ jobs:
       - name: Generate API
         run: |
           cd external-repo/Software
-          npx @openapitools/openapi-generator-cli --custom-generator MATLAB/lib/jar/MATLABClientCodegen-openapi-generator-0.0.1.jar generate -g MATLAB -i ${{ env.OPENAPI_SPEC }} -o macrobond --package-name ${{ env.PACKAGE_NAME }}
+          npx @openapitools/openapi-generator-cli -p AddOAuth="auth" --custom-generator MATLAB/lib/jar/MATLABClientCodegen-openapi-generator-0.0.1.jar generate -g MATLAB -i ${{ env.OPENAPI_SPEC }} -o macrobond --package-name ${{ env.PACKAGE_NAME }}
 
       - name: Configure Git
         run: |    
