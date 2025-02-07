@@ -16,7 +16,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          path: 'current-repo'      
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
           repository: 'mathworks-ref-arch/matlab-openapi-generator'      
+          path: 'external-repo'
       
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -32,16 +38,18 @@ jobs:
 
       - name: Run Maven Package
         run: |
-          cd Software/Java
+          cd external-repo/Software/Java
           mvn -q clean package
 
       - name: 
         run: |
-          cd Software
+          cd external-repo/Software
           npx @openapitools/openapi-generator-cli --custom-generator MATLAB/lib/jar/MATLABClientCodegen-openapi-generator-0.0.1.jar generate -g MATLAB -i https://api.macrobondfinancial.com/swagger/v1/swagger.json -o MacrobondMATLABAPI --package-name MacrobondMATLABAPI
 
       - name: Configure Git
         run: |
+          cp -r external-repo/Software/MacrobondMATLABAPI/* current-repo/
+          cd current-repo
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
