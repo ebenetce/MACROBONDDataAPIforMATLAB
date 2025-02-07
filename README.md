@@ -1,6 +1,6 @@
 ## MACROBOND Data API for MATLAB
 
-This repository autogenerates the Macrobond Data API for MATLAB. The latest openAPI definition is pulled once a month from the official directory:
+This repository autogenerates the [Macrobond Data API](https://help.macrobond.com/technical-information/the-macrobond-data-web-api-feed/) for MATLAB. The latest openAPI definition is pulled once a month from the official directory:
 
 https://api.macrobondfinancial.com/swagger/v1/swagger.json
 
