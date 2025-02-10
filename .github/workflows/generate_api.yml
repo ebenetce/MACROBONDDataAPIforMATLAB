@@ -50,6 +50,7 @@ jobs:
 
       - name: Configure Git
         run: |    
+          mkdir current-repo/tbx/${{ env.PACKAGE_NAME }}
           cp -r external-repo/Software/${{ env.PACKAGE_NAME }} current-repo/tbx/${{ env.PACKAGE_NAME }}
           cd current-repo
           git config --global user.name "github-actions[bot]"
