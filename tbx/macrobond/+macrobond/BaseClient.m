@@ -12,7 +12,7 @@ classdef (Abstract) BaseClient < handle & matlab.mixin.CustomDisplay
     
     
     
-    properties
+    properties (Access=private)
         % Base URI to use when calling the API. Allows using a different server
         % than specified in the original API spec.
         serverUri matlab.net.URI
@@ -31,6 +31,7 @@ classdef (Abstract) BaseClient < handle & matlab.mixin.CustomDisplay
         % require Bearer authentication consider adding the relevant header to
         % all requests in the preSend method.
         bearerToken = string.empty;
+        expiresAt int64 = [];
 
         % If API key authentication is used, the key can be supplied here. 
         % Note the key is only used if operations are called for which
@@ -48,6 +49,13 @@ classdef (Abstract) BaseClient < handle & matlab.mixin.CustomDisplay
         % Basic authentication consider setting the Credentials property in the
         % httpOptions rather than through httpCredentials.
         httpCredentials = matlab.net.http.Credentials.empty;
+
+        Scopes = [...
+                        "macrobond_web_api.read_mb",... % Read entities from the Macrobond database
+                        "macrobond_web_api.search_mb",... % Search in the Macrobond database
+                        "macrobond_web_api.read_structure",... % Read database structure like the database tree
+                        "macrobond_web_api.write_ih",... % Create and update in-house time series
+                    ];
     end
 
     properties (Constant)
@@ -135,53 +143,74 @@ classdef (Abstract) BaseClient < handle & matlab.mixin.CustomDisplay
             end
         end
         
-        function token = getOAuthToken(obj, name) %#ok<INUSD>
+        function token = getOAuthToken(obj, name)
             % GETOAUTHTOKEN called by requestAuth to obtain OAuth token.
-            %
-            % To be customized after code generation.
-            %
-            % This template method simply returns the bearerToken of the object
-            % which is assumed to have been manually set after manually having 
-            % completed the OAuth flow. Typically this method should be 
-            % customized to return a properly cached still valid token, refresh
-            % an cached expired token just-in-time or perform the entire OAuth
-            % flow from the start just-in-time and cache the token.
-            %
-            % As the exact OAuth flow may vary by OAuth provider, the full
-            % authentication flow is not automatically generated and the 
-            % template method simply returns the bearerToken property.
-            token = obj.bearerToken;
 
-            % The code below can be uncommented and then used as a starting 
-            % point to fully implement the OAuth flows for the flows specified 
-            % in the API spec.
+            if ~obj.isExpired
+                token = obj.bearerToken;
+                return
+            end
 
-            % switch name
-            %     case "ClientDirectAccess"
-            %         % Client Credentials Flow
-            %         tokenUrl = "https://apiauth.macrobondfinancial.com/mbauth/connect/token";
-            %         refreshUrl = "";
-            %         
-            %         % Scopes defined in spec
-            %         scopes = [...
-            %             "macrobond_web_api.read_mb",... % Read entities from the Macrobond database
-            %             "macrobond_web_api.search_mb",... % Search in the Macrobond database
-            %             "macrobond_web_api.read_structure",... % Read database structure like the database tree
-            %             "macrobond_web_api.write_ih",... % Create and update in-house time series
-            %         ];
-            %     case "auth"
-            %         % Authorization Code flow
-            %         authorizationUrl = "http://example.com";
-            %         tokenUrl = "https://example.com";
-            %         refreshUrl = "";
-            %         
-            %         % Scopes defined in spec
-            %         scopes = [...
-            %             "example",... % example
-            %         ];
-            %     otherwise
-            %         error("macrobond:UnknownOAuth", "Operation requested an OAUth flow which was not specified in the OpenAPI spec.")
-            % end
+            
+            switch name
+                case "ClientDirectAccess"
+                    % Client Credentials Flow
+                    tokenUrl = "https://apiauth.macrobondfinancial.com/mbauth/connect/token";
+
+                    % Scopes defined in spec
+                    scopes = obj.Scopes;
+                    
+                    if ~isSecret('MACROBOND_USERNAME')
+                        setSecret('MACROBOND_USERNAME');
+                    end
+
+                    if ~isSecret('MACROBOND_PASSWORD')
+                        setSecret('MACROBOND_PASSWORD')
+                    end
+
+                    payload = struct( "grant_type", "client_credentials", ...
+                                "client_id", getSecret('MACROBOND_USERNAME'), ...
+                                "client_secret", getSecret('MACROBOND_PASSWORD'), ...
+                                "scope", strjoin(scopes, ' '));
+
+                    opts = weboptions('MediaType','application/x-www-form-urlencoded');
+                    resp = webwrite(tokenUrl, payload, opts);
+                   
+                    if resp.token_type ~= "Bearer"
+                        error('macrobond:BaseClient:invalidToken', 'token is not bearer')
+                    end
+
+                    if isfield(res, 'expires_at')
+                        obj.expiresAt = int64(res.expires_at);
+                    elseif isfield(res, 'expires_in')
+                        obj.expiresAt = int64(posixtime(datetime('now'))) + int64(res.expires_in);
+                    else
+                        error('macrobond:BaseClient:noexpiration', 'no expires_at or expires_in')
+                    end
+
+                    if ~isfield(resp, "access_token")
+                        error('macrobond:BaseClient:noaccesstoken', 'No access_token')
+                    end
+
+                    obj.bearerToken = res.access_token;
+
+                case "auth"
+                    % Authorization Code flow
+                    % authorizationUrl = "https://apiauth.macrobondfinancial.com/mbauth";
+                    % tokenUrl = "https://apiauth.macrobondfinancial.com/mbauth/connect/token";
+                    % refreshUrl = "";
+                    % 
+                    % % Scopes defined in spec
+                    % scopes = [...
+                    %     "macrobond_web_api.read_mb",... % Read entities from the Macrobond database
+                    %     "macrobond_web_api.search_mb",... % Search in the Macrobond database
+                    %     "macrobond_web_api.read_structure",... % Read database structure like the database tree
+                    %     "macrobond_web_api.write_ih",... % Create and update in-house time series
+                    %     ];
+                    error("macrobond:UnknownOAuth", "Unsupported.")
+                otherwise
+                    error("macrobond:UnknownOAuth", "Operation requested an OAUth flow which was not specified in the OpenAPI spec.")
+            end
         end
 
         function [request, httpOptions, uri] = preSend(obj, operationId, request, httpOptions, uri) %#ok<INUSL> 
@@ -242,6 +271,19 @@ classdef (Abstract) BaseClient < handle & matlab.mixin.CustomDisplay
                         obj.cookies.load(settings.cookies.path);
                     otherwise
                         obj.(f) = settings.(f);
+                end
+            end
+        end
+
+        function expired = isExpired(obj)
+            if isempty(obj.expiresAt)
+                expired = true;
+                return 
+            else
+                if int64(posixtime(datetime('now'))) >= obj.expiresAt
+                    expired = true;
+                else
+                    expired = false;
                 end
             end
         end
