@@ -1,3 +1,0 @@
-function buildfile
-
-end
