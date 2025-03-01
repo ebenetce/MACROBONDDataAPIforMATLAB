@@ -18,19 +18,19 @@ classdef VintageSeriesResponse < macrobond.JSONMapper
     % Class properties
     properties
         % errorText - The error text if there was an error or not specified if there was no error - type: string
-        errorText string { macrobond.JSONMapper.fieldName(errorText,"errorText") }
+        errorText string { macrobond.JSONMapper.fieldName(errorText,"errorText")}
         % errorCode - Set if there was an error and not specified if there was no error  206 = PartialContent (The operation was successful, but only new revisions are included)  304 = NotModified (The item was not modified and is not included in the response)  403 = Forbidden (Access to the item was denied)  404 = NotFound (The item was not found)  500 = Other (There was an error and it is described in the error text) - type: ResponseErrorCode
-        errorCode  { macrobond.JSONMapper.fieldName(errorCode,"errorCode") }
+        errorCode  { macrobond.JSONMapper.fieldName(errorCode,"errorCode")}
         % metadata - The metadata of the entity or not specified if there was an error - type: macrobond.JSONMapperMap
-        metadata  { macrobond.JSONMapper.fieldName(metadata,"metadata") }
+        metadata  { macrobond.JSONMapper.fieldName(metadata,"metadata")}
         % values - The values of the series or not specified if there was an error. Missing values are represented by null. - type: array of double
-        values double { macrobond.JSONMapper.fieldName(values,"values"), macrobond.JSONMapper.JSONArray }
+        values double { macrobond.JSONMapper.fieldName(values,"values"), macrobond.JSONMapper.JSONArray}
         % dates - The dates of the series or not specified if there was an error - type: array of datetime
-        dates datetime { macrobond.JSONMapper.fieldName(dates,"dates"), macrobond.JSONMapper.JSONArray }
+        dates datetime { macrobond.JSONMapper.fieldName(dates,"dates"), macrobond.JSONMapper.JSONArray}
         % timesOfChange - The time each value was last modified - type: array of datetime
-        timesOfChange datetime { macrobond.JSONMapper.fieldName(timesOfChange,"timesOfChange"), macrobond.JSONMapper.JSONArray }
+        timesOfChange datetime { macrobond.JSONMapper.fieldName(timesOfChange,"timesOfChange"), macrobond.JSONMapper.JSONArray}
         % vintageTimeStamp - The time when this version of the series was recorded. It is omitted if the series does not have revision history and for the original set of values before any revisions were recorded. - type: datetime
-        vintageTimeStamp datetime { macrobond.JSONMapper.stringDatetime(vintageTimeStamp,'yyyy-MM-dd''T''HH:mm:ss.SSSZ', 'TimeZone', 'local'), macrobond.JSONMapper.fieldName(vintageTimeStamp,"vintageTimeStamp") }
+        vintageTimeStamp datetime { macrobond.JSONMapper.stringDatetime(vintageTimeStamp,'yyyy-MM-dd''T''HH:mm:ss.SSSZ', 'TimeZone', 'local'), macrobond.JSONMapper.fieldName(vintageTimeStamp,"vintageTimeStamp")}
     end
 
     % Class methods
@@ -38,14 +38,14 @@ classdef VintageSeriesResponse < macrobond.JSONMapper
         % Constructor
         function obj = VintageSeriesResponse(s,inputs)
             % To allow proper nesting of object, derived objects must
-            % call the JSONMapper constructor from their constructor. This 
+            % call the initialize method from their constructor. This 
             % also allows objects to be instantiated with Name-Value pairs
             % as inputs to set properties to specified values.
             arguments
                 s { macrobond.JSONMapper.ConstructorArgument } = []
                 inputs.?macrobond.models.VintageSeriesResponse
             end
-            obj@macrobond.JSONMapper(s,inputs);
+            obj = obj.initialize(s,inputs);
         end
     end %methods
 end %class

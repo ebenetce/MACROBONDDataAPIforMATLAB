@@ -205,7 +205,7 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.EntityInfoForDisplayResponse(response.Body.Data);
+                    result = macrobond.models.EntityInfoForDisplayResponse().fromJSON(response.Body.Data);
                 case 400
                     result = response.Body.Data;
                 case 404
@@ -338,9 +338,9 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.VintageSeriesResponse(response.Body.Data);
+                    result = macrobond.models.VintageSeriesResponse().fromJSON(response.Body.Data);
                 case 206
-                    result = macrobond.models.VintageSeriesResponse(response.Body.Data);
+                    result = macrobond.models.VintageSeriesResponse().fromJSON(response.Body.Data);
                 case 304
                     result = response.Body.Data;
                 case 400
@@ -452,7 +452,7 @@ classdef Series < macrobond.BaseClient
             ];
             optionalProperties = [...
             ];
-            request.Body(1).Payload = RevisionHistoryRequest.getPayload(requiredProperties,optionalProperties);
+            request.Body(1).Payload = RevisionHistoryRequest.getArrayPayload(requiredProperties,optionalProperties);
 
             % No form body parameters
 
@@ -482,7 +482,7 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.SeriesWithVintagesResponse(response.Body.Data);
+                    result = macrobond.models.SeriesWithVintagesResponse().fromJSON(response.Body.Data);
                 case 400
                     result = response.Body.Data;
                 case 401
@@ -601,7 +601,7 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.EntityResponse(response.Body.Data);
+                    result = macrobond.models.EntityResponse().fromJSON(response.Body.Data);
                 case 400
                     result = response.Body.Data;
                 case 401
@@ -709,7 +709,7 @@ classdef Series < macrobond.BaseClient
             ];
             optionalProperties = [...
             ];
-            request.Body(1).Payload = EntityRequest.getPayload(requiredProperties,optionalProperties);
+            request.Body(1).Payload = EntityRequest.getArrayPayload(requiredProperties,optionalProperties);
 
             % No form body parameters
 
@@ -739,7 +739,7 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.EntityResponse(response.Body.Data);
+                    result = macrobond.models.EntityResponse().fromJSON(response.Body.Data);
                 case 400
                     result = response.Body.Data;
                 case 401
@@ -863,7 +863,7 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.SeriesWithTimesOfChangeResponse(response.Body.Data);
+                    result = macrobond.models.SeriesWithTimesOfChangeResponse().fromJSON(response.Body.Data);
                 case 401
                     result = response.Body.Data;
                 case 403
@@ -984,7 +984,7 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.SeriesObservationHistoryResponse(response.Body.Data);
+                    result = macrobond.models.SeriesObservationHistoryResponse().fromJSON(response.Body.Data);
                 case 400
                     result = response.Body.Data;
                 case 404
@@ -1105,7 +1105,7 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.SeriesResponse(response.Body.Data);
+                    result = macrobond.models.SeriesResponse().fromJSON(response.Body.Data);
                 case 400
                     result = response.Body.Data;
                 case 401
@@ -1213,7 +1213,7 @@ classdef Series < macrobond.BaseClient
             ];
             optionalProperties = [...
             ];
-            request.Body(1).Payload = EntityRequest.getPayload(requiredProperties,optionalProperties);
+            request.Body(1).Payload = EntityRequest.getArrayPayload(requiredProperties,optionalProperties);
 
             % No form body parameters
 
@@ -1243,7 +1243,7 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.SeriesResponse(response.Body.Data);
+                    result = macrobond.models.SeriesResponse().fromJSON(response.Body.Data);
                 case 400
                     result = response.Body.Data;
                 case 401
@@ -1399,7 +1399,7 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.UnifiedSeriesResponse(response.Body.Data);
+                    result = macrobond.models.UnifiedSeriesResponse().fromJSON(response.Body.Data);
                 case 400
                     result = response.Body.Data;
                 case 401
@@ -1523,7 +1523,7 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.VintageSeriesResponse(response.Body.Data);
+                    result = macrobond.models.VintageSeriesResponse().fromJSON(response.Body.Data);
                 case 401
                     result = response.Body.Data;
                 case 403
@@ -1639,7 +1639,7 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.DataPackageListResponse(response.Body.Data);
+                    result = macrobond.models.DataPackageListResponse().fromJSON(response.Body.Data);
                 case 403
                     result = response.Body.Data;
                 case 401
@@ -1755,7 +1755,7 @@ classdef Series < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.SeriesWithRevisionsInfoResponse(response.Body.Data);
+                    result = macrobond.models.SeriesWithRevisionsInfoResponse().fromJSON(response.Body.Data);
                 case 401
                     result = response.Body.Data;
                 case 403

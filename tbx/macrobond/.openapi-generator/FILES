@@ -4,6 +4,9 @@
 +macrobond/+api/Series.m
 +macrobond/+api/SeriesTree.m
 +macrobond/+api/SubscriptionList.m
++macrobond/+models/AttributeFilter.m
++macrobond/+models/AttributeFilterCollection.m
++macrobond/+models/AttributeFilterValue.m
 +macrobond/+models/CalendarDateMode.m
 +macrobond/+models/CalendarMergeMode.m
 +macrobond/+models/DataPackageListResponse.m
@@ -63,6 +66,7 @@
 +macrobond/+models/seriestree_getnodes_get_200_response_inner.m
 +macrobond/BaseClient.m
 +macrobond/CookieJar.m
++macrobond/JSONDiscriminator.m
 +macrobond/JSONEnum.m
 +macrobond/JSONMapper.m
 +macrobond/JSONMapperMap.m

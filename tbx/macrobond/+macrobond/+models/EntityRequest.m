@@ -13,9 +13,9 @@ classdef EntityRequest < macrobond.JSONMapper
     % Class properties
     properties
         % name - The name of the entity - type: string
-        name string { macrobond.JSONMapper.fieldName(name,"name") }
+        name string { macrobond.JSONMapper.fieldName(name,"name")}
         % ifModifiedSince - If specified, the entity will only be returned if modified since the specified time. If not, the ErrorCode field of the response will be NotModified (304). - type: datetime
-        ifModifiedSince datetime { macrobond.JSONMapper.stringDatetime(ifModifiedSince,'yyyy-MM-dd''T''HH:mm:ss.SSSZ', 'TimeZone', 'local'), macrobond.JSONMapper.fieldName(ifModifiedSince,"ifModifiedSince") }
+        ifModifiedSince datetime { macrobond.JSONMapper.stringDatetime(ifModifiedSince,'yyyy-MM-dd''T''HH:mm:ss.SSSZ', 'TimeZone', 'local'), macrobond.JSONMapper.fieldName(ifModifiedSince,"ifModifiedSince")}
     end
 
     % Class methods
@@ -23,14 +23,14 @@ classdef EntityRequest < macrobond.JSONMapper
         % Constructor
         function obj = EntityRequest(s,inputs)
             % To allow proper nesting of object, derived objects must
-            % call the JSONMapper constructor from their constructor. This 
+            % call the initialize method from their constructor. This 
             % also allows objects to be instantiated with Name-Value pairs
             % as inputs to set properties to specified values.
             arguments
                 s { macrobond.JSONMapper.ConstructorArgument } = []
                 inputs.?macrobond.models.EntityRequest
             end
-            obj@macrobond.JSONMapper(s,inputs);
+            obj = obj.initialize(s,inputs);
         end
     end %methods
 end %class

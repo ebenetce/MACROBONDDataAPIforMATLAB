@@ -15,13 +15,13 @@ classdef RevisionHistoryRequest < macrobond.JSONMapper
     % Class properties
     properties
         % name - The name of the series - type: string
-        name string { macrobond.JSONMapper.fieldName(name,"name") }
+        name string { macrobond.JSONMapper.fieldName(name,"name")}
         % ifModifiedSince - If specified, the series will only be returned if modified since the specified time. If not, NotModified (304) will be returned. The value should be from the metadata LastModifiedTimeStamp of the previous response. - type: datetime
-        ifModifiedSince datetime { macrobond.JSONMapper.stringDatetime(ifModifiedSince,'yyyy-MM-dd''T''HH:mm:ss.SSSZ', 'TimeZone', 'local'), macrobond.JSONMapper.fieldName(ifModifiedSince,"ifModifiedSince") }
+        ifModifiedSince datetime { macrobond.JSONMapper.stringDatetime(ifModifiedSince,'yyyy-MM-dd''T''HH:mm:ss.SSSZ', 'TimeZone', 'local'), macrobond.JSONMapper.fieldName(ifModifiedSince,"ifModifiedSince")}
         % lastRevision - If specified, incremental updates can be return. PartialContent (206) will be returned in that case. The value should be from the metadata LastRevisionTimeStamp of the previous response. - type: datetime
-        lastRevision datetime { macrobond.JSONMapper.stringDatetime(lastRevision,'yyyy-MM-dd''T''HH:mm:ss.SSSZ', 'TimeZone', 'local'), macrobond.JSONMapper.fieldName(lastRevision,"lastRevision") }
+        lastRevision datetime { macrobond.JSONMapper.stringDatetime(lastRevision,'yyyy-MM-dd''T''HH:mm:ss.SSSZ', 'TimeZone', 'local'), macrobond.JSONMapper.fieldName(lastRevision,"lastRevision")}
         % lastRevisionAdjustment - If specified, incremental updates can be return. PartialContent (206) will be returned in that case. The value should be from the metadata LastRevisionAdjustmentTimeStamp of the previous response. - type: datetime
-        lastRevisionAdjustment datetime { macrobond.JSONMapper.stringDatetime(lastRevisionAdjustment,'yyyy-MM-dd''T''HH:mm:ss.SSSZ', 'TimeZone', 'local'), macrobond.JSONMapper.fieldName(lastRevisionAdjustment,"lastRevisionAdjustment") }
+        lastRevisionAdjustment datetime { macrobond.JSONMapper.stringDatetime(lastRevisionAdjustment,'yyyy-MM-dd''T''HH:mm:ss.SSSZ', 'TimeZone', 'local'), macrobond.JSONMapper.fieldName(lastRevisionAdjustment,"lastRevisionAdjustment")}
     end
 
     % Class methods
@@ -29,14 +29,14 @@ classdef RevisionHistoryRequest < macrobond.JSONMapper
         % Constructor
         function obj = RevisionHistoryRequest(s,inputs)
             % To allow proper nesting of object, derived objects must
-            % call the JSONMapper constructor from their constructor. This 
+            % call the initialize method from their constructor. This 
             % also allows objects to be instantiated with Name-Value pairs
             % as inputs to set properties to specified values.
             arguments
                 s { macrobond.JSONMapper.ConstructorArgument } = []
                 inputs.?macrobond.models.RevisionHistoryRequest
             end
-            obj@macrobond.JSONMapper(s,inputs);
+            obj = obj.initialize(s,inputs);
         end
     end %methods
 end %class

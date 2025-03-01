@@ -194,7 +194,7 @@ classdef Metadata < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.MetadataAttributeInformationResponse(response.Body.Data);
+                    result = macrobond.models.MetadataAttributeInformationResponse().fromJSON(response.Body.Data);
                 case 404
                     result = response.Body.Data;
                 case 401
@@ -314,7 +314,7 @@ classdef Metadata < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.MetadataValueInformationResponse(response.Body.Data);
+                    result = macrobond.models.MetadataValueInformationResponse().fromJSON(response.Body.Data);
                 case 400
                     result = response.Body.Data;
                 case 404
@@ -436,7 +436,7 @@ classdef Metadata < macrobond.BaseClient
             code = response.StatusCode;
             switch (code)
                 case 200
-                    result = macrobond.models.MetadataValueInformationResponse(response.Body.Data);
+                    result = macrobond.models.MetadataValueInformationResponse().fromJSON(response.Body.Data);
                 case 400
                     result = response.Body.Data;
                 case 404
